@@ -7,7 +7,6 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { seededRandom } from 'three/src/math/MathUtils.js';
 	import { useGame } from '../Game.svelte';
-	import { MeshFloatingMaterial } from '../materials/Floating';
 	export const useLoots = async () => {
 		const gltf = await new GLTFLoader().loadAsync('/gltfs/Loot.glb');
 		const meshes = gltf.scene.children as T.Mesh<T.BufferGeometry, T.MeshBasicMaterial>[];
@@ -16,8 +15,7 @@
 			true
 		);
 		const materials = meshes.map((m) => {
-			const material = new MeshFloatingMaterial().copy(m.material);
-			return material;
+			return m.material;
 		});
 		const m = new InstancedMesh2(mergedGeometries.scale(2, 2, 2), materials);
 		// m.addLOD(new T.BoxGeometry(), new T.MeshBasicMaterial(), 100);

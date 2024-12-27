@@ -6,7 +6,6 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { BufferGeometryUtils } from 'three/examples/jsm/Addons.js';
 	import { computeHeightAndQuaternionAt, up } from '../Sea.svelte';
-	import { MeshFloatingMaterial } from '../materials/Floating';
 	import { useGame, type Motion } from '../Game.svelte';
 
 	export const calcPositionAndAngleFromMotion = (motion: Motion, t: number) => {
@@ -33,8 +32,7 @@
 		const materials = meshes.map((m) => {
 			//this is highly specialised for the Ship model
 			//we create a new material for each ship material and merge it with the ship
-			const material = new MeshFloatingMaterial().copy(m.material);
-			return material;
+			return m.material;
 		});
 		const h = new InstancedMesh2(mergedGeometries.rotateY(Math.PI), materials);
 		const t = new InstancedMesh2(
@@ -73,7 +71,6 @@
 		});
 	});
 	const task = g.beforeRenderTask((d) => {
-		hulls.material.forEach((m) => (m.customUniforms.uTime.value += d));
 		const bt = g.blockTimeClock.getElapsedTime();
 		const ships = g.block.players.map((p) => p.ship);
 		hulls.updateInstances((obj, i) => {
